@@ -2,7 +2,7 @@ import os
 import sqlite3
 import csv
 import dotenv
-
+from datetime import datetime
 dotenv.load_dotenv()
 
 
@@ -14,8 +14,8 @@ class ControleGerente:
         self.cursor = self.db.cursor()
         self.cursor.execute(
             "CREATE TABLE IF NOT EXISTS funcionarios(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,nome VARCHAR(30) NOT NULL,cargo VARCHAR(30) NOT NULL,salario FLOAT NOT NULL,carga_horaria FLOAT NOT NULL)")
-        print("Nivel de Acesso: GERENTE")
         self.pswd__ = os.getenv("PASSWORD")
+        self.day = datetime.now().strftime('%d-%m-%Y')
 
     def checar_login(self, senha):
         if senha == self.pswd__:
@@ -77,3 +77,12 @@ class ControleGerente:
                 pass
         else:
             print("Funcionário não encontrado no banco de dados.")
+
+    def consultar_horarios(self):
+        dados = []
+        with open(f'{self.day}.csv', 'r') as arq_read:
+            reader = csv.reader(arq_read)
+            for n, linha in enumerate(reader):
+                dados.append(linha)
+        for d in dados:
+            print(d)

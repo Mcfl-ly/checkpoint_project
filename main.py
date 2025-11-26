@@ -1,6 +1,9 @@
 from gerente import ControleGerente
 import os
 import sqlite3
+from ponto import ControleDePonto
+
+
 db = sqlite3.connect("control.db")
 cursor = db.cursor()
 cursor.execute(
@@ -26,7 +29,6 @@ while True:
                             "5 - Consultar Horários\n"
                             "6 - Sair\n"))
 
-
             if action == 1:
                 nome = str(input('Nome: '))
                 cargo = str(input('Cargo: '))
@@ -45,7 +47,6 @@ while True:
                         break
                 elif confirmar == 2:
                     continue
-
 
             elif action == 2:
                 os.system('cls')
@@ -92,7 +93,52 @@ while True:
                 else:
                     os.system('cls')
                     break
+            elif action == 5:
+                gerente.consultar_horarios()
+                input('Enter para prosseguir...')
+            elif action == 6:
+                break
         else:
             os.system('cls')
             print("Senha incorreta.")
             continue
+    elif iniciar == 2:
+        os.system('cls')
+        c1 = ControleGerente()
+        all_func = c1.listar_funcionarios()
+        pode_entrar = False
+
+        nome_funcionario = str(input('Nome: '))
+
+        for i in all_func:
+            if nome_funcionario.title() in i:
+                pode_entrar = True
+        if pode_entrar:
+            os.system('cls')
+            entrada_saida = int(input("Nivel de acesso: FUNCIONÁRIO\n1 - Entrada\n2 - Saida\n"))
+            ponto = ControleDePonto()
+            if entrada_saida == 1:
+                os.system('cls')
+                ponto.entrada(nome_funcionario.title())
+                print(f"{nome_funcionario.title()}Entrada registrada com sucesso às {ponto.hora}")
+                pos_entrada = input("Gostaria de finalizar? S/N\n").upper()
+                if pos_entrada == 's':
+                    os.system('cls')
+                    print("Finalizando...")
+                    break
+
+                elif pos_entrada == 'n':
+                    os.system('cls')
+                    continue
+
+            elif entrada_saida == 2:
+                os.system('cls')
+                ponto.saida(nome_funcionario.title())
+                input("Enter para continuar...")
+            else:
+                print("Escolha uma opção válida.")
+        else:
+            os.system('cls')
+            print("Funcionário não encontrado.")
+    elif iniciar == 3:
+        break
