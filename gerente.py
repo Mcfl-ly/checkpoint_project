@@ -72,8 +72,7 @@ class ControleGerente:
                         self.cursor.execute(f"DELETE FROM funcionarios WHERE nome = '{nome.title()}'")
                         self.db.commit()
                         print("funcionário excluido com sucesso")
-                    else:
-                        print("Funcionário não encontrado no banco de dados.")
+
             else:
                 pass
         else:
